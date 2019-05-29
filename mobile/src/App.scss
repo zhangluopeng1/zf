@@ -1,0 +1,171 @@
+html {
+  box-sizing: border-box;
+  background-color: white;
+  min-height: 100%;
+  color: #333;
+  font-family: 'Helvetica Neue', Tahoma, Arial, PingFangSC-Regular,
+    'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: none;
+}
+body,
+div,
+p,
+ul,
+li {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+a:hover {
+  text-decoration: none !important;
+}
+.right {
+  float: right;
+}
+
+.left {
+  float: left;
+}
+// .router-fade-enter-active,
+// .router-fade-leave-active {
+//   transition: opacity 0.1s;
+// }
+// .router-fade-enter,
+// .router-fade-leave-active {
+//   opacity: 0;
+// }
+
+// 商品列表
+.goodsList {
+  .price0 {
+    margin: 5px 0;
+    font-size: $fontS3;
+    color: #8b8989;
+  }
+  .joinCart {
+    float: right;
+    border: none;
+    background: transparent;
+  }
+}
+.center {
+  text-align: center;
+}
+.boss_button {
+  color: white;
+  background: #66cc66;
+  border: 1px solid #66cc66;
+  padding: 0.2rem 0.8rem;
+  border-radius: 8px;
+}
+.mint-cell {
+  display: inline-block !important;
+  width: 100% !important;
+  font-size: 0.1rem !important;
+  background: rgba($color: #000000, $alpha: 0);
+  .mint-cell-wrapper {
+    font-size: 0.35rem !important;
+  }
+  .mint-cell-title {
+    padding-left: 1rem;
+  }
+}
+.mint-radio-label {
+  font-size: 12px;
+}
+.mint-radiolist-title {
+  display: none !important;
+}
+.changeradio {
+  // .mint-radio-core {
+  //   width: 15px !important;
+  //   height: 15px !important;
+  // }
+  .mint-cell-wrapper {
+    padding: 0 !important;
+  }
+  // .mint-radio-core::after {
+  //   left: 2.5px !important;
+  //   height: 2.5px !important;
+  // }
+  .mint-radio-input:checked + .mint-radio-core {
+    background-color: #66cc66 !important;
+    border-color: #66cc66 !important;
+  }
+  .mint-radiolist {
+    display: inherit !important;
+  }
+}
+.mint-msgbox-content {
+  .mint-radiolist-label {
+    padding: 0 !important;
+  }
+}
+a:link {
+  text-decoration: none !important;
+}
+a:visited {
+  text-decoration: none !important;
+}
+a:hover {
+  text-decoration: none !important;
+}
+.mint-cell-wrapper {
+  background-image: none !important;
+}
+.mint-cell:last-child {
+  background-image: none !important;
+}
+input,
+textarea {
+  -webkit-appearance: none !important;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+}
+.icon-jia {
+  font-size: 0.74rem !important;
+}
+.icon-minus-fill {
+  font-size: 0.74rem !important;
+}
+.after {
+  .icon-guanbi {
+    font-size: 0.4rem !important;
+  }
+}
+.icon-mimabukejian {
+  font-size: 0.4rem !important;
+  margin-left: 5px;
+}
+.single_l_img {
+  width: 75rem / $model;
+  height: 69rem / $model;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  img {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+  }
+}
+.mint-msgbox-content {
+  padding: 0.1rem;
+  .mint-radio-core {
+    width: 15px !important;
+    height: 15px !important;
+  }
+  .mint-radio-label {
+    font-size: 0.3rem;
+  }
+  .mint-radio-core::after {
+    top: 3.5px;
+    left: 3.5px;
+    width: 6px;
+    height: 6px;
+  }
+}

@@ -1,0 +1,241 @@
+[
+  {
+    "title": "菜品类0",
+    "id": 0,
+    "content": [
+      {
+        "name": "临安土鸡蛋",
+        "price": "3.5-6",
+        "image": "https://fuss10.elemecdn.com/2/b6/231c3dbf174051bed21eeb609e133png.png?imageMogr/format/webp/thumbnail/!130x130r/gravity/Center/crop/130x130/",
+        "norms": [
+          {
+            "id": 0,
+            "allprice": "10/箱",
+            "weight": "每箱5斤",
+            "UnitPrice": "4",
+            "num": 0,
+            "checkeds": true
+          },
+          {
+            "id": 12,
+            "allprice": "101/箱",
+            "weight": "每箱51斤",
+            "UnitPrice": "4",
+            "num": 0,
+            "checkeds": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "菜品类1",
+    "id": 1,
+    "content": [
+      {
+        "name": "临安土鸡蛋",
+        "price": "3.5-6",
+        "image": "https://fuss10.elemecdn.com/2/b6/231c3dbf174051bed21eeb609e133png.png?imageMogr/format/webp/thumbnail/!130x130r/gravity/Center/crop/130x130/",
+        "norms": [
+          {
+            "id": 1,
+            "allprice": "120/箱",
+            "weight": "每箱5斤",
+            "UnitPrice": "4",
+            "num": 0,
+            "checkeds": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "菜品类2",
+    "id": 2,
+    "content": [
+      {
+        "name": "临安土鸡蛋",
+        "price": "3.5-6",
+        "image": "https://fuss10.elemecdn.com/2/b6/231c3dbf174051bed21eeb609e133png.png?imageMogr/format/webp/thumbnail/!130x130r/gravity/Center/crop/130x130/",
+        "norms": [
+          {
+            "id": 2,
+            "allprice": "130/箱",
+            "weight": "每箱5斤",
+            "UnitPrice": "4",
+            "num": 0,
+            "checkeds": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "菜品类3",
+    "id": 3,
+    "content": [
+      {
+        "name": "临安土鸡蛋",
+        "price": "3.5-6",
+        "image": "https://fuss10.elemecdn.com/2/b6/231c3dbf174051bed21eeb609e133png.png?imageMogr/format/webp/thumbnail/!130x130r/gravity/Center/crop/130x130/",
+        "norms": [
+          {
+            "id": 3,
+            "allprice": "104/箱",
+            "weight": "每箱5斤",
+            "UnitPrice": "4",
+            "num": 0,
+            "checkeds": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "菜品类4",
+    "id": 4,
+    "content": [
+      {
+        "name": "临安土鸡蛋",
+        "price": "3.5-6",
+        "image": "https://fuss10.elemecdn.com/2/b6/231c3dbf174051bed21eeb609e133png.png?imageMogr/format/webp/thumbnail/!130x130r/gravity/Center/crop/130x130/",
+        "norms": [
+          {
+            "id": 4,
+            "allprice": "105/箱",
+            "weight": "每箱5斤",
+            "UnitPrice": "4",
+            "num": 0,
+            "checkeds": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "菜品类5",
+    "id": 5,
+    "content": [
+      {
+        "name": "临安土鸡蛋",
+        "price": "3.5-6",
+        "image": "https://fuss10.elemecdn.com/2/b6/231c3dbf174051bed21eeb609e133png.png?imageMogr/format/webp/thumbnail/!130x130r/gravity/Center/crop/130x130/",
+        "norms": [
+          {
+            "id": 5,
+            "allprice": "106/箱",
+            "weight": "每箱5斤",
+            "UnitPrice": "4",
+            "num": 0,
+            "checkeds": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "菜品类6",
+    "id": 6,
+    "content": [
+      {
+        "name": "临安土鸡蛋",
+        "price": "3.5-6",
+        "image": "https://fuss10.elemecdn.com/2/b6/231c3dbf174051bed21eeb609e133png.png?imageMogr/format/webp/thumbnail/!130x130r/gravity/Center/crop/130x130/",
+        "norms": [
+          {
+            "id": 6,
+            "allprice": "107/箱",
+            "weight": "每箱5斤",
+            "UnitPrice": "4",
+            "num": 0,
+            "checkeds": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "菜品类7",
+    "id": 7,
+    "content": [
+      {
+        "name": "临安土鸡蛋",
+        "price": "3.5-6",
+        "image": "https://fuss10.elemecdn.com/2/b6/231c3dbf174051bed21eeb609e133png.png?imageMogr/format/webp/thumbnail/!130x130r/gravity/Center/crop/130x130/",
+        "norms": [
+          {
+            "id": 7,
+            "allprice": "108/箱",
+            "weight": "每箱5斤",
+            "UnitPrice": "4",
+            "num": 0,
+            "checkeds": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "菜品类8",
+    "id": 8,
+    "content": [
+      {
+        "name": "临安土鸡蛋",
+        "price": "3.5-6",
+        "image": "https://fuss10.elemecdn.com/2/b6/231c3dbf174051bed21eeb609e133png.png?imageMogr/format/webp/thumbnail/!130x130r/gravity/Center/crop/130x130/",
+        "norms": [
+          {
+            "id": 8,
+            "allprice": "109/箱",
+            "weight": "每箱5斤",
+            "UnitPrice": "4",
+            "num": 0,
+            "checkeds": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "菜品类9",
+    "id": 9,
+    "content": [
+      {
+        "name": "临安土鸡蛋",
+        "price": "3.5-6",
+        "image": "https://fuss10.elemecdn.com/2/b6/231c3dbf174051bed21eeb609e133png.png?imageMogr/format/webp/thumbnail/!130x130r/gravity/Center/crop/130x130/",
+        "norms": [
+          {
+            "id": 9,
+            "allprice": "1230/箱",
+            "weight": "每箱5斤",
+            "UnitPrice": "4",
+            "num": 0,
+            "checkeds": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "菜品类10",
+    "id": 10,
+    "content": [
+      {
+        "name": "临安土鸡蛋",
+        "price": "3.5-6",
+        "image": "https://fuss10.elemecdn.com/2/b6/231c3dbf174051bed21eeb609e133png.png?imageMogr/format/webp/thumbnail/!130x130r/gravity/Center/crop/130x130/",
+        "norms": [
+          {
+            "id": 10,
+            "allprice": "1210/箱",
+            "weight": "每箱5斤",
+            "UnitPrice": "4",
+            "num": 0,
+            "checkeds": true
+          }
+        ]
+      }
+    ]
+  }
+]
