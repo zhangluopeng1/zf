@@ -1,35 +1,14 @@
 <template>
-  <div class="home_boss" ref="viewBox">
-    <div class="search">
-      <form action="" v-on:submit.prevent="a">
-        <mt-search
-        v-model="searchValue"
-        cancel-text="取消"
-        placeholder="搜索歌曲"
-        @keyup.enter.native="search"
-        class="font-size-8"
-        style="width:100%;height:auto;"
-        >
-        </mt-search>
-      </form>
-    </div>
-    <ul
-    v-infinite-scroll="loadMore"
-    infinite-scroll-distance="200">
-      <li v-for="(item,key) in list" :key="key" @click="check = key" :class="check===key? 'checked' : ''">
-        <mt-cell title="标题文字" label="描述信息">
-          <span>icon 是图片{{item}}</span>
-          <div slot="icon" class="icon_img">
-            <img  src="../assets/img/bg.png" >
-          </div>
-        </mt-cell>
-      </li>
-      <div class="loading" v-if="loading">
-        <mt-spinner type="fading-circle"></mt-spinner>
-      </div>
-    </ul>
-    <div class="button_song">
-      立即点歌
+  <div class="home_boss_success" ref="viewBox">
+    <mt-header title="支付完成">
+      <router-link to="/" slot="left">
+        <mt-button icon="back">返回</mt-button>
+      </router-link>
+    </mt-header>
+    <div class="content">
+    <div><i class="iconfont icon-weixinzhifu"></i>微信支付成功</div>
+    <div><i class="iconfont icon-Alipaypayment"></i>支付宝支付成功</div>
+    <div class="price">￥1.00</div>    
     </div>
   </div>
 </template>
@@ -37,94 +16,16 @@
 export default {
   name: 'home',
   data() {
-    return {
-      list: [1, 2, 3, 4, 5, 66, 7, 8, 9, 10, 2, 3, 4, 5, 66, 7, 8, 9, 10],
-      searchValue: '',
-      check: '',
-      loading: false
-    };
+    return {};
   },
   created() {},
-  mounted() {
-    function GetQueryString(name) {
-      var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
-      var r = window.location.search.substr(1).match(reg);
-      if (r != null) return decodeURI(r[2]);
-      return null;
-    }
-
-    // this.$indicator.open();
-    // if (this.$route.query.brandId) {
-    //   this.setSession('brandId', this.$route.query.brandId);
-    // }
-    // 支付宝登录
-    if (this.$route.query.auth_code && !this.isLogin()) {
-      this.$axios
-        .post('/v1/store/getStoreJoinStatus', {
-          data: this.getSession('supplierGuid')
-        })
-        .then(res => {
-          let data = {
-            brandGuid: res.data.data,
-            code: this.$route.query.auth_code,
-            companyGuid: this.getSession('supplierGuid')
-          };
-          this.$axios
-            .post('/v1/AliPay/codeTurnAccessToken', { data: data })
-            .then(res => {
-              // this.$toast('登录成功');
-            });
-        });
-    }
-    // 微信登录
-    if (GetQueryString('code') && !this.isLogin()) {
-      if (GetQueryString('state') === 'snsapi_userinfo') {
-        this.$axios
-          .post('/v1/store/getStoreJoinStatus', {
-            data: this.getSession('supplierGuid')
-          })
-          .then(res => {
-            let data = {
-              brandGuid: res.data.data,
-              code: GetQueryString('code'),
-              companyGuid: this.getSession('supplierGuid')
-            };
-            this.$axios
-              .post('/v1/WeChatPay/codeTurnAccessTokenTest', { data: data })
-              .then(res => {
-                // this.$toast('登录成功');
-                console.log(res);
-                if (res.data.data.thirdPartUserGuid) {
-                  this.$indicator.close();
-                  this.$toast('请先完善您的信息');
-                  this.setSession(
-                    'thirdPartUserGuid',
-                    res.data.data.thirdPartUserGuid
-                  );
-                  this.$router.push('/register');
-                } else {
-                  this.setData('user', res.data.data);
-                  this.getdateil();
-                }
-              });
-          });
-      }
-    } else {
-      this.getdateil();
-    }
-    var _this = this;
-    window.addEventListener('scroll', this.scroll);
-  },
+  mounted() {},
   destroyed() {},
   methods: {
     //获取详细列表
     getdateil() {},
     //获取更多列表
-    loadMore() {
-      this.loading = true;
-      this.list.push('1');
-      this.loading = false;
-    },
+    loadMore() {},
     //搜索
     search() {},
     a() {}
@@ -145,60 +46,42 @@ export default {
 </script>
 <style lang="scss">
 @import './../assets/css/variable.scss';
-.home_boss {
-  ul {
-    max-height: 100vh; //与屏幕一样高度
-    overflow-y: auto;
-    padding-bottom: 1.2rem;
-    // box-sizing: border-box;
-    li {
-      padding: 0 10px;
-      border-bottom: 1px solid rgba($color: #ccc, $alpha: 0.3);
+.home_boss_success {
+  .mint-header {
+    background: white;
+  }
+  .mint-header-title {
+    color: #000;
+  }
+  .mintui-back {
+    color: #000;
+  }
+  .content {
+    div {
+      text-align: center;
+      padding: 10px;
+      font-size: 0.5rem;
     }
   }
-  .loading .mint-spinner-fading-circle {
-    margin: 0 auto;
+  .price {
+    color: #ff6a68;
   }
-  .search {
-    padding: 10px;
-    background: url('../assets/img/bg.png');
-    .mint-search {
-      height: auto;
-    }
+  i {
+    font-size: 0.6rem;
+    vertical-align: middle;
+    color: #ccc;
+    margin-right: 5px;
   }
-  .button_song {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    line-height: 20px;
-    background: #3d95ff;
-    color: white;
-    height: 1.2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .icon-weixinzhifu,
+  .icon-Alipaypayment {
+    position: relative;
+    top: -0.05rem;
+    font-size: 1rem;
+    color: #3d95ff;
   }
-  .icon_img {
-    position: absolute;
-    left: 0;
-    img {
-      width: 1rem;
-      height: 1rem;
-    }
-  }
-  .checked {
-    background: #ccc;
-  }
-  .mint-searchbar {
-    background: rgba(0, 0, 0, 0);
-    padding: 5px;
-    padding-left: 30px;
-  }
-  .mint-searchbar-inner {
-    height: 30px;
-    border-radius: 5px;
+  .icon-weixinzhifu {
+    color: #66dd66;
+    font-size: 0.8rem;
   }
 }
 </style>

@@ -28,12 +28,13 @@
         <mt-spinner type="fading-circle"></mt-spinner>
       </div>
     </ul>
-    <div class="button_song">
+    <div class="button_song" @click="chooseSong()">
       立即点歌
     </div>
   </div>
 </template>
 <script>
+import { Toast } from 'mint-ui';
 export default {
   name: 'home',
   data() {
@@ -167,8 +168,8 @@ export default {
           this.brandGuid = res.data.data;
           let baseURL =
             'https:' == document.location.protocol
-              ? 'https://' + window.location.host + '/mobile/'
-              : 'http://' + window.location.host + '/mobile/';
+              ? 'https://' + window.location.host + '/'
+              : 'http://' + window.location.host + '/';
           baseURL = baseURL + '#/';
           console.log(baseURL);
           this.$axios
@@ -194,6 +195,17 @@ export default {
               window.location.href = data;
             });
         });
+    },
+    chooseSong() {
+      if (!this.check) {
+        Toast({
+          message: '请选择歌曲',
+          position: 'center',
+          duration: 5000
+        });
+      } else {
+        this.$router.push('/pay');
+      }
     }
   },
 
@@ -267,5 +279,8 @@ export default {
     height: 30px;
     border-radius: 5px;
   }
+}
+.mint-button-text {
+  display: none;
 }
 </style>

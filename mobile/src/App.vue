@@ -241,4 +241,11 @@ body::-webkit-scrollbar {
     line-height: 2px !important;
   }
 }
+.mint-button-text {
+  display: none;
+}
+.mint-header-title {
+  flex: 7;
+  text-align: left;
+}
 </style>
