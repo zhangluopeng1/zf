@@ -1,14 +1,9 @@
 <template>
   <div class="home_boss_success" ref="viewBox">
-    <mt-header title="支付完成">
-      <router-link to="/" slot="left">
-        <mt-button icon="back">返回</mt-button>
-      </router-link>
-    </mt-header>
     <div class="content">
-    <div><i class="iconfont icon-weixinzhifu"></i>微信支付成功</div>
-    <div><i class="iconfont icon-Alipaypayment"></i>支付宝支付成功</div>
-    <div class="price">￥1.00</div>    
+    <div v-if="getPlatform() === 'weixin'"><i class="iconfont icon-weixinzhifu" ></i>微信支付成功</div>
+    <div v-if="getPlatform() !== 'weixin'"><i class="iconfont icon-Alipaypayment"></i>支付宝支付成功</div>
+    <div class="price">￥{{ list.price }}</div>    
     </div>
   </div>
 </template>
@@ -16,9 +11,13 @@
 export default {
   name: 'home',
   data() {
-    return {};
+    return {
+      list: {}
+    };
   },
-  created() {},
+  created() {
+    this.list =  JSON.parse(localStorage.getItem("song"))
+  },
   mounted() {},
   destroyed() {},
   methods: {
@@ -47,6 +46,9 @@ export default {
 <style lang="scss">
 @import './../assets/css/variable.scss';
 .home_boss_success {
+  .mint-header-button {
+    flex:0
+  }
   .mint-header {
     background: white;
   }
@@ -57,6 +59,7 @@ export default {
     color: #000;
   }
   .content {
+    margin-top: 1.2rem;
     div {
       text-align: center;
       padding: 10px;

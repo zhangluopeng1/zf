@@ -14,12 +14,14 @@ Vue.prototype.imgURL =
       : 'http://' + window.location.host + '/'
     : 'https://supplychain.yunqi-cn.com/';
 Vue.prototype.$axios = axios;
-Vue.prototype.baseURL =
-  window.location.host.indexOf('localhost') === -1
-    ? 'https:' == document.location.protocol
-      ? 'https://' + window.location.host + '/api/manage'
-      : 'http://' + window.location.host + '/api/manage'
-    : '/api/manage';
+Vue.prototype.listURL = 'http://121.41.108.53:85'
+// Vue.prototype.baseURL =
+//   window.location.host.indexOf('localhost') === -1
+//     ? 'https:' == document.location.protocol
+//       ? 'https://' + window.location.host + ''
+//       : 'http://' + window.location.host + ''
+//     : '/api';
+Vue.prototype.baseURL = 'http://121.41.108.53:85';
 //自定义的弹窗组件
 import emComponent from './components/popup/index.js';
 Vue.use(emComponent);

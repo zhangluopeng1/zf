@@ -11,12 +11,13 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://47.100.248.132:8080',
+        target: 'http://121.41.108.53:85',
+        // target: 'http://bankmanage.api.payweipan.com',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
         }
-      }
+      },
     },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

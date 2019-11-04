@@ -1,18 +1,13 @@
 <template>
   <div class="home_boss_pay" ref="viewBox">
-    <mt-header title="确认点歌">
-      <router-link to="/" slot="left">
-        <mt-button icon="back">返回</mt-button>
-      </router-link>
-    </mt-header>
     <ul>
       <li>
         <label>歌曲名称</label>
-        <span class="name">最美的期待</span>
+        <span class="name">{{ list.filename }}</span>
       </li>
       <li>
         <label>歌曲价格</label>
-        <span class="price">￥1.00</span>
+        <span class="price">￥{{ list.price }}</span>
       </li>
       <li>
         <label>支付方式</label>
@@ -30,11 +25,18 @@
         </span>
       </li>
     </ul>
+    <p style="margin-top:30px">
+      您即将支付{{ list.price }}元到贵州幻维科技有限公司
+    </p>
+    <p>
+      用于点播歌曲 : {{ list.filename }}
+    </p>
     <div class="pay">
       <button @click="goPay()">
       确认支付
       </button>
     </div>
+
   </div>
 </template>
 <script>
@@ -46,6 +48,7 @@ export default {
     };
   },
   created() {
+    this.list =  JSON.parse(localStorage.getItem("song"))
     console.log(this.getPlatform());
     if (this.getPlatform() == 'weixin') {
       this.check = 2;
@@ -55,6 +58,11 @@ export default {
   destroyed() {},
   methods: {
     goPay() {
+      console.log(this.list)
+      // this.$axios.get(`http://121.41.108.53:10088/play?ipaddr=${this.list.ipaddr}&port=${this.list.port}&filename=${this.list.filename}`).then(res=>{
+      //   console.log(res)
+      // })
+      // this.$router.push('/paysuccess')
       function GetQueryString(name) {
         var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
         var r = window.location.search.substr(1).match(reg);
@@ -83,8 +91,6 @@ export default {
             })
             .then(res => {
               // 支付
-              console.log(res);
-              console.log(1);
               let formContent = res.data.data.weChatPayReturnData;
 
               if (!res.data.isError) {
@@ -142,28 +148,34 @@ export default {
         // });
       } else {
         // 支付宝
-        let returnUrl = `${
-          'https:' == document.location.protocol
-            ? 'https://' + window.location.host
-            : 'http://' + window.location.host
-        }/mobile/#/paydetail`;
+        let returnUrl = 'http://bankmanage.web.payweipan.com/#/paysuccess';
         let self = this;
         this.$axios
-          .post(`/v1/orders/order/pay`, {
-            data: {
-              amount: this.getSession('order_pay').amount,
-              orderGuidArray: this.getSession('order_pay').orderGuidArray,
-              platform: this.checked,
-              returnUrl: returnUrl
+          .post(`http://bankmanage.api.payweipan.com/api/AliPay/MobileWebPay`, {
+            TotalAmount: this.list.price,
+            Subject: this.list.filename,
+            ReturnUrl: returnUrl,
+            InterfaceParam:{
+              IpAddr:this.list.ipaddr,
+              Port:this.list.port,
+              FileName:this.list.filename,
+              DevId:this.list.devid,
+              MediaId:this.list.id
             }
           })
           .then(res => {
-            this.strData = res.data.data.aliPayReturnData;
+            console.log(res)
+                const div = document.createElement('div')
+                /* 此处form就是后台返回接收到的数据 */
+                div.innerHTML = res.data
+                div.style='display:none'
+                document.body.appendChild(div)
+                document.forms[0].submit()
             // createPayForm.call(this, strData);
-            this.$nextTick(function() {
-              console.log(document.forms['punchout_form']);
-              document.forms['punchout_form'].submit();
-            });
+            // this.$nextTick(function() {
+            //   console.log(document.forms['punchout_form']);
+            //   document.forms['punchout_form'].submit();
+            // });
           })
           .catch(err => {
             console.log(err);
@@ -176,6 +188,15 @@ export default {
 <style lang="scss">
 @import './../assets/css/variable.scss';
 .home_boss_pay {
+  .mint-header-button {
+    flex:0
+  }
+  p {
+    padding: 10px 10px 0 10px;
+    margin: 0 10px;
+    font-size: 15px;
+    opacity: .7;
+  }
   .mint-header {
     background: white;
   }
@@ -186,7 +207,7 @@ export default {
     color: #000;
   }
   li {
-    padding: 15px 10px;
+    padding: 25px 10px;
     margin: 0 10px;
     font-size: 15px;
     border-bottom: 1px solid rgba($color: #ccc, $alpha: 0.3);
@@ -216,6 +237,7 @@ export default {
     }
   }
   .pay {
+    margin-top:30px;
     text-align: center;
     button {
       width: 80%;
@@ -228,7 +250,7 @@ export default {
     }
   }
   .name {
-    color: #999;
+    color: #454545;
   }
   .checked {
     color: #3d95ff;
