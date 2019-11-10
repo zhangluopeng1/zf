@@ -14,12 +14,15 @@
         <span v-if="getPlatform() !== 'weixin'">
           <i class="iconfont icon-Alipaypayment"></i>
           支付宝
-          <span style="float:right">
+          <span style="float:right" @click="check = 1">
             <i class="iconfont icon-zhengque" :class="check == 1? 'checked' : ''"></i>
           </span>
         </span>
-        <span v-if="getPlatform() == 'weixin'"><i class="iconfont icon-weixinzhifu"></i>微信
-          <span style="float:right">
+      </li>
+      <li>
+        <label>  </label>
+        <span v-if="getPlatform() !== 'zhifubao'"><i class="iconfont icon-weixinzhifu"></i>微信
+          <span style="float:right" @click="check = 2">
             <i class="iconfont icon-zhengque" :class="check == 2? 'checked' : ''"></i>
           </span>
         </span>
@@ -40,6 +43,7 @@
   </div>
 </template>
 <script>
+import { Indicator } from 'mint-ui';
 export default {
   name: 'home',
   data() {
@@ -58,7 +62,8 @@ export default {
   destroyed() {},
   methods: {
     goPay() {
-      console.log(this.list)
+      // Indicator.open()
+      // this.$loading.show();
       // this.$axios.get(`http://121.41.108.53:10088/play?ipaddr=${this.list.ipaddr}&port=${this.list.port}&filename=${this.list.filename}`).then(res=>{
       //   console.log(res)
       // })
@@ -69,89 +74,42 @@ export default {
         if (r != null) return decodeURI(r[2]);
         return null;
       }
-      if (this.getPlatform() == 'weixin') {
-        // this.$axios.post('/v1/WeChatPay/isBingWeChat').then(res => {
-        if (GetQueryString('code')) {
-          let self = this;
-          let returnUrl = `${
-            'https:' == document.location.protocol
-              ? 'https://' + window.location.host
-              : 'http://' + window.location.host
-          }/mobile/#/paydetail`;
-          // alert('回调地址:' + returnUrl);
-          this.$axios
-            .post(`/v1/orders/order/pay`, {
-              data: {
-                amount: this.getSession('order_pay').amount,
-                orderGuidArray: this.getSession('order_pay').orderGuidArray,
-                platform: this.checked,
-                returnUrl: returnUrl,
-                code: GetQueryString('code')
-              }
-            })
-            .then(res => {
-              // 支付
-              let formContent = res.data.data.weChatPayReturnData;
+      function urlencode (str) {  
+          str = (str + '').toString();   
 
-              if (!res.data.isError) {
-                if (typeof WeixinJSBridge == 'undefined') {
-                  if (document.addEventListener) {
-                    document.addEventListener(
-                      'WeixinJSBridgeReady',
-                      onBridgeReady,
-                      false
-                    );
-                  } else if (document.attachEvent) {
-                    document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-                    document.attachEvent(
-                      'onWeixinJSBridgeReady',
-                      onBridgeReady
-                    );
-                  }
-                } else {
-                  onBridgeReady(formContent, res.data.data.orderGuids);
-                }
-              }
-              function onBridgeReady(params, orderGuids) {
-                console.log(params['appId']);
-                WeixinJSBridge.invoke(
-                  'getBrandWCPayRequest',
-                  {
-                    appId: params['appId'], //公众号名称，由商户传入
-                    timeStamp: params['timeStamp'], //时间戳，自1970年以来的秒数
-                    nonceStr: params['nonceStr'], //随机串
-                    package: params['package'],
-                    signType: params['signType'], //微信签名方式：
-                    paySign: params['paySign'] //微信签名
-                    //                                  "total_fee": self.getOrderInfo.price
-                  },
-                  function(res) {
-                    console.log(res);
-                    // alert(orderGuids);
-                    if (res.err_msg == 'get_brand_wcpay_request:ok') {
-                      // alert(orderGuids);
-
-                      // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
-                      self.$toast('支付成功');
-                      setTimeout(function() {
-                        self.$router.push('/paysuccess');
-                      }, 500);
-                    }
-                  }
-                );
-              }
-            })
-            .catch(err => {});
-        } else {
-          this.thirdLogin('snsapi_userinfo');
-        }
-        // });
-      } else {
-        // 支付宝
-        let returnUrl = 'http://bankmanage.web.payweipan.com/#/paysuccess';
+          return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').  
+          replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');  
+      }
+      if (this.check == 2) {
+        let returnUrl = 'http://www.hwkjtop.com/#/paysuccess';
         let self = this;
         this.$axios
-          .post(`http://bankmanage.api.payweipan.com/api/AliPay/MobileWebPay`, {
+          .post(`http://www.api.hwkjtop.com/api/WeChatPay/MobileWebPay`, {
+            TotalAmount: this.list.price,
+            Subject: this.list.filename.substring(0,10),
+            ReturnUrl: returnUrl,
+            InterfaceParam:{
+              IpAddr:this.list.ipaddr,
+              Port:this.list.port,
+              FileName:this.list.filename.substring(0,10),
+              DevId:this.list.devid,
+              MediaId:this.list.id
+            }
+          })
+          .then(res => {
+            console.log(res.data.mweb_url + '&redirect_url=' + urlencode('http://www.hwkjtop.com'))
+            let data = res.data.mweb_url + '&redirect_url=' + urlencode('http://www.hwkjtop.com')
+            window.location.href= data
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      } else {
+        // 支付宝
+        let returnUrl = 'http://www.hwkjtop.com/#/paysuccess';
+        let self = this;
+        this.$axios
+          .post(`http://www.api.hwkjtop.com/api/AliPay/MobileWebPay`, {
             TotalAmount: this.list.price,
             Subject: this.list.filename,
             ReturnUrl: returnUrl,
