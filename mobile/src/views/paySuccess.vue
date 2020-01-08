@@ -3,7 +3,7 @@
     <div class="content">
     <div v-if="getPlatform() === 'weixin'"><i class="iconfont icon-weixinzhifu" ></i>微信支付成功</div>
     <div v-if="getPlatform() !== 'weixin'"><i class="iconfont icon-Alipaypayment"></i>支付宝支付成功</div>
-    <div class="price">￥{{ list.price }}</div>    
+    <div class="price">￥{{ list.price * list.count }}</div>    
     </div>
   </div>
 </template>
@@ -12,7 +12,10 @@ export default {
   name: 'home',
   data() {
     return {
-      list: {}
+      list: {
+        price: 0,
+        count: 0
+      }
     };
   },
   created() {

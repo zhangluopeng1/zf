@@ -2,16 +2,25 @@
   <div class="home_boss_pay" ref="viewBox">
     <ul>
       <li>
-        <label>歌曲名称</label>
+        <label>产品名称</label>
         <span class="name">{{ list.filename }}</span>
       </li>
       <li>
-        <label>歌曲价格</label>
+        <label>产品单价</label>
         <span class="price">￥{{ list.price }}</span>
       </li>
+      <li style="padding:0">
+        <!-- <label>点播次数</label>
+        <span class="price">￥{{ list.price }}</span> -->
+        <mt-field label="点播次数" placeholder="请输入数字" type="number" v-model="list.count"></mt-field>
+      </li>
       <li>
+        <label>产品总价</label>
+        <span class="price">￥{{ list.price * list.count }}</span>
+      </li>
+      <li v-if="getPlatform() !== 'weixin'">
         <label>支付方式</label>
-        <span v-if="getPlatform() !== 'weixin'">
+        <span>
           <i class="iconfont icon-Alipaypayment"></i>
           支付宝
           <span style="float:right" @click="check = 1">
@@ -19,9 +28,9 @@
           </span>
         </span>
       </li>
-      <li>
-        <label>  </label>
-        <span v-if="getPlatform() !== 'zhifubao'"><i class="iconfont icon-weixinzhifu"></i>微信
+      <li  v-if="getPlatform() === 'weixin'">
+        <label>支付方式</label>
+        <span><i class="iconfont icon-weixinzhifu"></i>微信
           <span style="float:right" @click="check = 2">
             <i class="iconfont icon-zhengque" :class="check == 2? 'checked' : ''"></i>
           </span>
@@ -29,10 +38,10 @@
       </li>
     </ul>
     <p style="margin-top:30px">
-      您即将支付{{ list.price }}元到贵州幻维科技有限公司
+      您即将支付{{ list.price * list.count }}元到贵州幻维科技有限公司
     </p>
     <p>
-      用于点播歌曲 : {{ list.filename }}
+      用于点播产品 : {{ list.filename }}
     </p>
     <div class="pay">
       <button @click="goPay()">
@@ -48,12 +57,27 @@ export default {
   name: 'home',
   data() {
     return {
-      check: 1
+      check: 1,
+      list:{
+        count: 1,
+        price: 1
+      }
     };
   },
   created() {
+      function GetQueryString(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]);
+        return null;
+      }
     this.list =  JSON.parse(localStorage.getItem("song"))
-    console.log(this.getPlatform());
+    console.log(this.list)
+    // if( !this.list.count ||  this.list.count == 0){
+    //   this.$set(this.list,'count',1)
+    //   // this.list.count = 1
+    // }
+    this.$set(this.list,'count',1)
     if (this.getPlatform() == 'weixin') {
       this.check = 2;
     }
@@ -61,8 +85,86 @@ export default {
   mounted() {},
   destroyed() {},
   methods: {
+    weixinpay (code) {
+      let self = this
+          this.$axios
+            .post(`http://www.api.hwkjtop.com/api/WeChatPay/MobileJsPay`,{
+                Amount: this.list.price,
+                Subject: this.list.filename.substring(0, 10),
+                openId: code.data.data || code.data,
+                InterfaceParam:{
+                  IpAddr:this.list.ipaddr,
+                  Port:this.list.port,
+                  DevId:this.list.devid,
+                  MediaId:this.list.id,
+                  Count: this.list.count || 1
+                }
+            })
+            .then(res => {
+                            // 支付
+                            console.log(res)
+              let formContent = res.data
+              if (!res.data.isError) {
+                if (typeof WeixinJSBridge == 'undefined') {
+                  if (document.addEventListener) {
+                    document.addEventListener(
+                      'WeixinJSBridgeReady',
+                      onBridgeReady,
+                      false
+                    );
+                  } else if (document.attachEvent) {
+                    document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                    document.attachEvent(
+                      'onWeixinJSBridgeReady',
+                      onBridgeReady
+                    );
+                  }
+                } else {
+                  onBridgeReady(formContent);
+                }
+              }
+              function onBridgeReady(params, orderGuids) {
+                console.log(params)
+                // alert(params['app_id'])
+                // alert(params['time_stamp'])
+                // alert(params['nonce'])
+                // alert(params['package'])
+                // alert(params['sign'])
+                // alert(params['sign_type'])
+                WeixinJSBridge.invoke(
+                  'getBrandWCPayRequest',
+                  {
+                    appId: params['app_id'], //公众号名称，由商户传入
+                    timeStamp: params['time_stamp'], //时间戳，自1970年以来的秒数
+                    nonceStr: params['nonce'], //随机串
+                    package: params['package'],
+                    signType: params['sign_type'], //微信签名方式：
+                    paySign: params['sign'] //微信签名
+                    //                                  "total_fee": self.getOrderInfo.price
+                  },
+                  function(res) {
+                    Indicator.close();
+                    console.log(res);
+                    // alert(res.err_msg)
+                    // alert(orderGuids);
+                    if (res.err_msg == 'get_brand_wcpay_request:ok') {
+                      // alert(orderGuids);
+                      // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                      self.$toast('支付成功');
+                      // alert(self)
+                      setTimeout(function() {
+                        // alert('我要跳转了!')
+                        self.$router.push('/paysuccess');
+                      }, 500);
+                    }
+                  }
+                );
+              }
+            })
+    },
     goPay() {
-      // Indicator.open()
+      localStorage.setItem("song",JSON.stringify(this.list))
+      Indicator.open()
       // this.$loading.show();
       // this.$axios.get(`http://121.41.108.53:10088/play?ipaddr=${this.list.ipaddr}&port=${this.list.port}&filename=${this.list.filename}`).then(res=>{
       //   console.log(res)
@@ -81,44 +183,44 @@ export default {
           replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');  
       }
       if (this.check == 2) {
-        let returnUrl = 'http://www.hwkjtop.com/#/paysuccess';
-        let self = this;
-        this.$axios
-          .post(`http://www.api.hwkjtop.com/api/WeChatPay/MobileWebPay`, {
-            TotalAmount: this.list.price,
-            Subject: this.list.filename.substring(0,10),
-            ReturnUrl: returnUrl,
-            InterfaceParam:{
-              IpAddr:this.list.ipaddr,
-              Port:this.list.port,
-              FileName:this.list.filename.substring(0,10),
-              DevId:this.list.devid,
-              MediaId:this.list.id
-            }
-          })
-          .then(res => {
-            console.log(res.data.mweb_url + '&redirect_url=' + urlencode('http://www.hwkjtop.com'))
-            let data = res.data.mweb_url + '&redirect_url=' + urlencode('http://www.hwkjtop.com')
-            window.location.href= data
-          })
-          .catch(err => {
-            console.log(err);
-          })
+                // this.$axios.post('/v1/WeChatPay/isBingWeChat').then(res => {
+        if (this.getSession('code')) {
+          let self = this;
+          let returnUrl = `${
+            'https:' == document.location.protocol
+              ? 'https://' + window.location.host
+              : 'http://' + window.location.host
+          }#/paysuccess`
+          // alert('回调地址:' + returnUrl);
+          if(this.getSession('openId')){
+            this.weixinpay(this.getSession('openId'))
+          }
+          this.$axios
+            .get(`http://www.api.hwkjtop.com/api/WeChatPay/GetOpenId?code=${this.getSession('code')}`)
+            .then(code => {
+              this.weixinpay(code)
+              this.setSession('openId',code)
+            })
+            .catch(err => {});
+        } else {
+          // this.thirdLogin('snsapi_userinfo');
+        }
+
       } else {
         // 支付宝
         let returnUrl = 'http://www.hwkjtop.com/#/paysuccess';
         let self = this;
         this.$axios
           .post(`http://www.api.hwkjtop.com/api/AliPay/MobileWebPay`, {
-            TotalAmount: this.list.price,
+            Amount: this.list.price,
             Subject: this.list.filename,
             ReturnUrl: returnUrl,
             InterfaceParam:{
               IpAddr:this.list.ipaddr,
               Port:this.list.port,
-              FileName:this.list.filename,
               DevId:this.list.devid,
-              MediaId:this.list.id
+              MediaId:this.list.id,
+              Count: this.list.count || 1
             }
           })
           .then(res => {
@@ -144,6 +246,12 @@ export default {
 };
 </script>
 <style lang="scss">
+.home_boss_pay {
+  .mint-cell .mint-cell-title {
+    padding-left:0!important;
+    font-size: 16px;
+  }
+}
 @import './../assets/css/variable.scss';
 .home_boss_pay {
   .mint-header-button {

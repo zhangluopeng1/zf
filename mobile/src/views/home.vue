@@ -9,7 +9,7 @@
         <mt-search
         v-model="searchValue"
         cancel-text="取消"
-        placeholder="搜索歌曲"
+        placeholder="搜索产品"
         @keyup.enter.native="search"
         class="font-size-8"
         style="width:100%;height:auto;"
@@ -33,7 +33,7 @@
       </div>
     </ul>
     <div class="button_song" @click="chooseSong()">
-      立即点歌
+      去支付
     </div>
   </div>
 </template>
@@ -61,63 +61,12 @@ export default {
       return null;
     }
 
-    // this.$indicator.open();
-    // if (this.$route.query.brandId) {
-    //   this.setSession('brandId', this.$route.query.brandId);
-    // }
-    // 支付宝登录
-    if (this.$route.query.auth_code && !this.isLogin()) {
-      this.$axios
-        .post('/v1/store/getStoreJoinStatus', {
-          data: this.getSession('supplierGuid')
-        })
-        .then(res => {
-          let data = {
-            brandGuid: res.data.data,
-            code: this.$route.query.auth_code,
-            companyGuid: this.getSession('supplierGuid')
-          };
-          this.$axios
-            .post('/v1/AliPay/codeTurnAccessToken', { data: data })
-            .then(res => {
-              // this.$toast('登录成功');
-            });
-        });
-    }
     // 微信登录
-    if (GetQueryString('code') && !this.isLogin()) {
-      if (GetQueryString('state') === 'snsapi_userinfo') {
-        this.$axios
-          .post('/v1/store/getStoreJoinStatus', {
-            data: this.getSession('supplierGuid')
-          })
-          .then(res => {
-            let data = {
-              brandGuid: res.data.data,
-              code: GetQueryString('code'),
-              companyGuid: this.getSession('supplierGuid')
-            };
-            this.$axios
-              .post('/v1/WeChatPay/codeTurnAccessTokenTest', { data: data })
-              .then(res => {
-                // this.$toast('登录成功');
-                console.log(res);
-                if (res.data.data.thirdPartUserGuid) {
-                  this.$indicator.close();
-                  this.$toast('请先完善您的信息');
-                  this.setSession(
-                    'thirdPartUserGuid',
-                    res.data.data.thirdPartUserGuid
-                  );
-                  this.$router.push('/register');
-                } else {
-                  this.setData('user', res.data.data);
-                  this.getdateil();
-                }
-              });
-          });
-      }
+    if (!GetQueryString('code') && this.getPlatform() === 'weixin' && !this.getSession('code')) {
+        let data = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx612901746d6bc8b4&redirect_uri=${encodeURIComponent(`http://www.hwkjtop.com/#/?devid=${this.$route.query.devid || ''}`)}&response_type=code&scope=snsapi_base&state=2222#wechat_redirect`;
+        window.location.href = data;
     } else {
+      this.setSession('code',GetQueryString('code'))
       this.getdateil();
     }
     var _this = this;
@@ -224,7 +173,7 @@ export default {
        this.$router.push('/pay');
       } else {
                 Toast({
-          message: '请选择歌曲',
+          message: '请选择产品',
           position: 'center',
           duration: 5000
         });
@@ -248,11 +197,11 @@ export default {
 <style lang="scss">
 @import './../assets/css/variable.scss';
 .home_boss {
-  padding-top: 2.4rem;
+  padding-top: 3.1rem;
   .header {
     img {
       width: 100%;
-      height:2.4rem;
+      height:3.1rem;
     }
   }
   ul {
